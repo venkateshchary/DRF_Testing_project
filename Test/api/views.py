@@ -15,28 +15,13 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 
-def token_required(f):  
-    @wraps(f)
-    def decorated(request,format=None):
-        print("requets headers:",request.headers)
-        token = None
-        if 'token' in request.headers:
-            token = request.headers['token'].strip()
-        if not token:
-            return Response({'message':"token missing"})
-        try:
-            data = jwt.decode(token,settings.SECRET_KEY)
-            print("print out the data :",data)
-        except:
-            return  Response(serializer.data,  status=status.HTTP_400_BAD_REQUEST)
-        return f(request,format=None)
-    return decorated
-
 class MetadataList(APIView):
+    permission_classes = (IsAuthenticated,)
 
     
     def get(self, request,format=None):
         location = Metadata.objects.all()
+        print("requet is successded--------->")
         serializer = MetadataSerializer(location, many=True)
         return Response(serializer.data)
 
@@ -67,7 +52,6 @@ class Locationdept(APIView):
     '''
     list all departments 
     '''
-    @token_required
     def get(self,request,location_id, format=None):
         try:
             queryset= Metadata.objects.filter(LOCATION=location_id)

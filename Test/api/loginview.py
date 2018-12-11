@@ -47,13 +47,9 @@ def user_login(request):
                 user_details = {}
                 user_details['name'] = "%s" % (user.email)
                 user_details['token'] = token
-                user_details["session"]= request.session.session_key
-                user_details["csrf"]= django.middleware.csrf.get_token(request)
-    # return Response({"token": token.key})
+                  # return Response({"token": token.key})
                 return Response(user_details, status=status.HTTP_200_OK)
             except Exception as e:
                     raise e
         else:
-            res = {
-                'error': 'can not authenticate with the given credentials or the account has been deactivated'}
-            return Response(res, status=status.HTTP_403_FORBIDDEN)
+            raise
