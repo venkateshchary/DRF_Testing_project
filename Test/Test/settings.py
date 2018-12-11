@@ -1,6 +1,7 @@
 
 import os
 
+import datetime
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -114,8 +115,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+#---------------> for token authentication
+
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    )
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+##        'rest_framework.authentication.TokenAuthentication',  # <-- And here
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ],
+}
+JWT_AUTH = {
+ 
+    'JWT_VERIFY': True,
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000),
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+ 
 }
